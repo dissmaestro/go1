@@ -4,15 +4,13 @@ import (
 	"fmt"
 )
 
-type MetricType string
-
 const (
-	GaugeMetric   MetricType = "gauge"
-	CounterMetric MetricType = "counter"
+	GaugeMetric   string = "gauge"
+	CounterMetric string = "counter"
 )
 
 type Metric struct {
-	Type  MetricType
+	Type  string
 	Name  string
 	Value interface{}
 }
