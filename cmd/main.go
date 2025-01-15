@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	"~/Documents/projects/golang/1/cmd/server"
 
 	"github.com/dissmaestro/go1/cmd/agent"
+	"github.com/dissmaestro/go1/cmd/server"
 )
 
 func main() {
 	fmt.Println("Запускаем server")
 	go func() {
-		server.Main()
+		server.StartServer()
 	}()
 
 	fmt.Println("Запускаем агент")

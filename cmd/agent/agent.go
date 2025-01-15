@@ -58,27 +58,29 @@ func collectRuntimeMetrics() Metric {
 }
 
 func RunAgent() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	var pollInterval time.Duration = 2 * time.Second
 	var reportInterval time.Duration = 10 * time.Second
 	var serverUrl string = "http://localhost:8080/update"
-
+	log.Println("HHHHHHHHHHHHHHUUUUUUUUUUUUUUUUUUUIIIIIIIIIIIIIIIIII")
 	metricsChan := make(chan Metric, 1)
-	ticker := time.NewTicker(pollInterval)
-	defer ticker.Stop()
 
 	go func() {
-		for range ticker.C {
+		for range time.Tick(pollInterval) {
 			metrics := collectRuntimeMetrics()
 			metricsChan <- metrics
+			log.Println("SUKA")
 			fmt.Println("Metrics collected:", metrics.Gauge)
 		}
 	}()
 
 	go func() {
 		for range time.Tick(reportInterval) {
+			log.Println("BLYUAT")
 			metrics := <-metricsChan
 			for name, value := range metrics.Gauge {
-				url := fmt.Sprintf("%s/gauge/%s%d", serverUrl, name, value)
+				url := fmt.Sprintf("%s/gauge/%s/%v", serverUrl, name, value)
+				log.Println("Url for sending:", url)
 				_, err := http.Post(url, "text/plain", nil)
 				if err != nil {
 					log.Println("Failed to send gauge metric:", err)
@@ -92,4 +94,6 @@ func RunAgent() {
 		}
 
 	}()
+
+	select {}
 }
