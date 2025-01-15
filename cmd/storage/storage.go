@@ -2,6 +2,7 @@ package storage
 
 import (
 	"fmt"
+	"sync"
 )
 
 const (
@@ -16,6 +17,7 @@ type Metric struct {
 }
 
 type MemStorage struct {
+	mu   sync.Mutex
 	data map[string]Metric
 }
 
@@ -26,7 +28,8 @@ func NewMemStorage() *MemStorage {
 }
 
 func (s *MemStorage) UpdateMerics(m Metric) error {
-
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	if m.Type != CounterMetric && m.Type != GaugeMetric {
 		return fmt.Errorf("invalid metric type: %s. Expected 'gauge' or 'counter'", m.Type)
 	}
@@ -53,6 +56,8 @@ func (s *MemStorage) UpdateMerics(m Metric) error {
 }
 
 func (s *MemStorage) GetMetric(name string) (Metric, bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	metric, exist := s.data[name]
 	return metric, exist
 }
