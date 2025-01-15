@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"fmt"
@@ -69,7 +69,7 @@ func (s *Server) GetMetricHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Metric found: %+v\n", data)
 }
 
-func main() {
+func StartServer() {
 	server := NewServer()
 	http.HandleFunc("/update/", server.UpdateMetricHandler)
 	http.HandleFunc("/get/", server.GetMetricHandler)

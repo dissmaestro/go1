@@ -93,8 +93,3 @@ func RunAgent() {
 
 	}()
 }
-
-func main() {
-	RunAgent()
-	select {} // Блокируем main горутину для работы агента
-}
